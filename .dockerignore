@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Certificates (should be mounted as volumes in production)
+certs/
+*.pem
+*.p12
+*.der
+*.tsr
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+server_*.log
+
+# Test files
+reply*.der
+test.tsr
+
+# Documentation
+README.md
+.gitattributes
+
+# CI/CD
+.github/

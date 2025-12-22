@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  tsa-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tsa-server
+    ports:
+      - "5000:5000"
+    volumes:
+      # Mount certificates directory (generate first with: python -m tsa.cert_utils --dir certs)
+      - ./certs:/app/certs:ro
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
