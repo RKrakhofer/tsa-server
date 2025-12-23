@@ -43,7 +43,7 @@ class AuditChain:
     3. Storing both timestamps in an audit database
     """
 
-    def __init__(self, db_path: Path, external_tsas: list[str] = None):
+    def __init__(self, db_path: Path, external_tsas: Optional[list[str]] = None):
         """
         Initialize audit chain manager.
 
@@ -90,7 +90,7 @@ class AuditChain:
         conn.close()
 
     def create_audit_timestamp(
-        self, local_tsa_url: str, test_data: bytes = None
+        self, local_tsa_url: str, test_data: Optional[bytes] = None
     ) -> AuditRecord:
         """
         Create an audit record by timestamping with external TSA.
@@ -213,7 +213,7 @@ class AuditChain:
             failure = status.get("failure_info")
             raise ValueError(f"TSA request failed: {failure}")
 
-        return response.content
+        return bytes(response.content)
 
     def _store_record(self, record: AuditRecord):
         """Store audit record in database"""
@@ -303,7 +303,7 @@ class AuditChain:
             "last_audit_status": last[1] if last else None,
         }
 
-    def export_audit_proof(self, output_path: Path, limit: int = None):
+    def export_audit_proof(self, output_path: Path, limit: Optional[int] = None):
         """
         Export audit chain as proof of trustworthiness.
 
@@ -319,7 +319,7 @@ class AuditChain:
 
         cur.execute(query)
 
-        proof = {
+        proof: dict = {
             "export_date": datetime.now(timezone.utc).isoformat(),
             "statistics": self.get_statistics(),
             "records": [],

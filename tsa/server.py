@@ -148,7 +148,7 @@ def build_timestamp_token(
         {"content_type": "signed_data", "content": signed_data}
     )
 
-    return content_info.dump()
+    return bytes(content_info.dump())
 
 
 @app.route("/tsa", methods=["POST"])

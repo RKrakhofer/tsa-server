@@ -10,6 +10,7 @@ import sys
 import time
 from pathlib import Path
 from threading import Event, Thread
+from typing import Optional
 
 from .audit_chain import AuditChain
 
@@ -42,7 +43,7 @@ class AuditScheduler:
         self.local_tsa_url = local_tsa_url
         self.interval_seconds = interval_seconds
         self.stop_event = Event()
-        self.thread: Thread = None
+        self.thread: Optional[Thread] = None
 
     def start(self):
         """Start the scheduler in a background thread"""
