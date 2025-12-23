@@ -1,5 +1,7 @@
 """Simple client that posts data to TSA server and prints the token."""
+
 import argparse
+
 import requests
 
 

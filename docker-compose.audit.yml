@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  tsa-server:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./certs:/app/certs:ro
+    environment:
+      - FLASK_ENV=production
+    networks:
+      - tsa-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  audit-scheduler:
+    build: .
+    command: python -m tsa.audit_scheduler --db /data/audit_chain.db --local-tsa http://tsa-server:5000/tsa --interval 3600
+    volumes:
+      - audit-data:/data
+    depends_on:
+      - tsa-server
+    networks:
+      - tsa-net
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  audit-data:
+    driver: local
+
+networks:
+  tsa-net:
+    driver: bridge

@@ -1,13 +1,15 @@
 """
 Simple certificate helper: generate CA and TSA cert for testing.
 """
+
 import argparse
 import datetime
 from pathlib import Path
+
 from cryptography import x509
-from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.x509.oid import NameOID
 
 
 def generate(cadir: Path):
@@ -29,11 +31,13 @@ def generate(cadir: Path):
     ca_key_p = cadir / "ca_key.pem"
     ca_cert_p = cadir / "ca_cert.pem"
     with ca_key_p.open("wb") as f:
-        f.write(ca_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption(),
-        ))
+        f.write(
+            ca_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+                encryption_algorithm=serialization.NoEncryption(),
+            )
+        )
     with ca_cert_p.open("wb") as f:
         f.write(ca_cert.public_bytes(serialization.Encoding.PEM))
 
@@ -55,11 +59,13 @@ def generate(cadir: Path):
     tsa_key_p = cadir / "tsa_key.pem"
     tsa_cert_p = cadir / "tsa_cert.pem"
     with tsa_key_p.open("wb") as f:
-        f.write(tsa_key.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.TraditionalOpenSSL,
-            encryption_algorithm=serialization.NoEncryption(),
-        ))
+        f.write(
+            tsa_key.private_bytes(
+                encoding=serialization.Encoding.PEM,
+                format=serialization.PrivateFormat.TraditionalOpenSSL,
+                encryption_algorithm=serialization.NoEncryption(),
+            )
+        )
     with tsa_cert_p.open("wb") as f:
         f.write(tsa_cert.public_bytes(serialization.Encoding.PEM))
 

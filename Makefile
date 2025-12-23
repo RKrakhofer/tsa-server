@@ -44,3 +44,32 @@ shell: ## Open shell in running container
 
 verify: ## Verify a timestamp reply (usage: make verify FILE=timestamp.tsr)
 	@. .venv/bin/activate && python tools/verify_tsr.py $(FILE) certs/tsa_cert.pem
+
+# Testing targets
+test-local: ## Run all tests locally (like GitHub Actions)
+	@bash run_tests.sh
+
+test-unit: ## Run unit tests only
+	@. .venv/bin/activate && pip install -q -r requirements-dev.txt
+	@. .venv/bin/activate && pytest tests/ -v
+
+test-coverage: ## Run tests with coverage report
+	@. .venv/bin/activate && pip install -q -r requirements-dev.txt
+	@. .venv/bin/activate && pytest tests/ --cov=tsa --cov-report=html --cov-report=term
+	@echo "\nCoverage report: htmlcov/index.html"
+
+test-lint: ## Run linting checks
+	@. .venv/bin/activate && pip install -q -r requirements-dev.txt
+	@echo "Running flake8..."
+	@. .venv/bin/activate && flake8 tsa/ tools/ client/ tests/
+	@echo "Running black check..."
+	@. .venv/bin/activate && black --check tsa/ tools/ client/ tests/
+	@echo "Running isort check..."
+	@. .venv/bin/activate && isort --check-only tsa/ tools/ client/ tests/
+
+format: ## Auto-format code with black and isort
+	@. .venv/bin/activate && pip install -q -r requirements-dev.txt
+	@echo "Formatting with black..."
+	@. .venv/bin/activate && black tsa/ tools/ client/ tests/
+	@echo "Sorting imports with isort..."
+	@. .venv/bin/activate && isort tsa/ tools/ client/ tests/
