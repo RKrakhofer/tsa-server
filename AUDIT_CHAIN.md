@@ -102,17 +102,30 @@ python -m tsa.audit_scheduler \
 
 ### 4. Docker-Deployment (Empfohlen)
 
-Für Produktions-Umgebungen verwenden Sie Docker Compose:
+Für Produktions-Umgebungen verwenden Sie Docker Compose mit Registry-Images:
 
 ```bash
+# .env Datei erstellen und konfigurieren
+cp .env.example .env
+# Editieren: GITHUB_REPOSITORY=your-username/tsa-server
+
+# Images aus Registry ziehen
+docker compose -f docker-compose.audit.yml pull
+
 # TSA-Server UND Audit-Scheduler zusammen starten
-docker-compose -f docker-compose.audit.yml up -d
+docker compose -f docker-compose.audit.yml up -d
 
 # Logs anzeigen
-docker-compose -f docker-compose.audit.yml logs -f audit-scheduler
+docker compose -f docker-compose.audit.yml logs -f audit-scheduler
 
 # Status prüfen
-docker-compose -f docker-compose.audit.yml ps
+docker compose -f docker-compose.audit.yml ps
+```
+
+**Lokale Entwicklung (Images lokal bauen):**
+
+```bash
+docker compose -f docker-compose.local.yml up -d
 ```
 
 ## Verwendung

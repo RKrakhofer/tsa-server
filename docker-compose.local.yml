@@ -1,6 +1,9 @@
+# Docker Compose für lokale Entwicklung (baut Images lokal)
+# Verwendung: docker compose -f docker-compose.local.yml up
+
 services:
   tsa-server:
-    image: ghcr.io/${GITHUB_REPOSITORY:-username/tsa-server}:${IMAGE_TAG:-latest}
+    build: .
     ports:
       - "5000:5000"
     volumes:
@@ -16,7 +19,7 @@ services:
       retries: 3
 
   audit-scheduler:
-    image: ghcr.io/${GITHUB_REPOSITORY:-username/tsa-server}:${IMAGE_TAG:-latest}
+    build: .
     command: python -m tsa.audit_scheduler --db /data/audit_chain.db --local-tsa http://tsa-server:5000/tsa --interval 3600
     volumes:
       - audit-data:/data
